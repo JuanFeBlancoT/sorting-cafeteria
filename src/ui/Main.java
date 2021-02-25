@@ -13,24 +13,31 @@ public class Main {
 	public static double iterations = 0; 
 	public static double changesPerIteration = 0;
 	public static DecimalFormat df = new DecimalFormat("###.##");
-
+	
 
 	public static void main(String[] args) throws IOException{
 		
 		int numberOfCases = Integer.parseInt(br.readLine());
 		System.out.println("\n");
 		int i = 0;
+		boolean invalidInput = false;
 		
-		while(i<numberOfCases) {
+		while(i<numberOfCases && !invalidInput) {
 						
 			double[] sortedNums = getNumbersFromCase();
-			sortedNums = bubbleSort(sortedNums);
-			printOutput(sortedNums);
+			invalidInput = validateInput(sortedNums);
 			
-			iterations = 0;
-			changesPerIteration = 0;
+			if(!invalidInput) {
+				sortedNums = bubbleSort(sortedNums);
+				printOutput(sortedNums);
+				
+				iterations = 0;
+				changesPerIteration = 0;
 
-			i++;
+				i++;
+			}else {
+				System.out.println("Check the input. There are either negative values or one of them is repeated.");
+			}
 		}
 		br.close();
 	}
@@ -64,6 +71,20 @@ public class Main {
 		}
 		return array;
 	}//end bubbleSort
+	
+	public static boolean validateInput(double[] array) {
+		
+		boolean invalid = false;
+		for (int i = 0; i < array.length && !invalid; i++) {
+			for (int j = i+1; j < array.length; j++) {
+				if(array[i]==array[j] || array[i]<0) {
+					invalid = true;
+				}
+			}
+		}
+		
+		return invalid;
+	}
 	
 	public static void printOutput(double[] sortedNums) {
 		double avearage = changesPerIteration/iterations;
